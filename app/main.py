@@ -14,7 +14,11 @@ app = FastAPI(title="Crédito Frios API")
 app.add_middleware(GZipMiddleware, minimum_size=1024)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    
+    allow_origins=[
+    "http://localhost:3000",
+    "https://analise-de-credito-sigma.vercel.app",
+],
     allow_methods=["*"],
     allow_headers=["*"],
 )
