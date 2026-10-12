@@ -248,6 +248,27 @@ MIGRATIONS: list[tuple[str, str, str]] = [
         CREATE INDEX IF NOT EXISTS idx_pagamentos_data_pagamento ON pagamentos(data_pagamento);
         """,
     ),
+    (
+        "0013_usuarios",
+        "Usuários do sistema: login, perfil (admin/analista/leitura), bloqueio por tentativas e invalidação de sessões",
+        """
+        CREATE TABLE IF NOT EXISTS usuarios (
+            id SERIAL PRIMARY KEY,
+            email TEXT NOT NULL,
+            nome TEXT NOT NULL,
+            senha_hash TEXT NOT NULL,
+            papel TEXT NOT NULL DEFAULT 'analista'
+                CHECK (papel IN ('admin', 'analista', 'leitura')),
+            ativo BOOLEAN NOT NULL DEFAULT TRUE,
+            tentativas_falhas INTEGER NOT NULL DEFAULT 0,
+            bloqueado_ate TIMESTAMPTZ,
+            versao_token INTEGER NOT NULL DEFAULT 1,
+            criado_em TIMESTAMP DEFAULT NOW(),
+            ultimo_login TIMESTAMP
+        );
+        CREATE UNIQUE INDEX IF NOT EXISTS ux_usuarios_email ON usuarios (LOWER(email));
+        """,
+    ),
 ]
 
 
